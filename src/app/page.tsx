@@ -7,13 +7,10 @@ export default function LandingPage() {
       <header className="px-4 lg:px-6 h-14 flex items-center border-b">
         <Link className="flex items-center justify-center" href="#">
           <Brain className="h-6 w-6 text-blue-600" />
-          <span className="ml-2 font-bold text-xl">AprendeIA</span>
+          <span className="ml-2 font-bold text-xl">Deep Penguin</span>
         </Link>
         <nav className="ml-auto flex gap-4 sm:gap-6">
-          <Link className="text-sm font-medium hover:text-blue-600" href="#">
-            Características
-          </Link>
-          <Link className="text-sm font-medium hover:text-blue-600" href="#">
+          <Link className="text-sm font-medium hover:text-blue-600" href="/teachers">
             Para Maestros
           </Link>
           <Link className="text-sm font-medium hover:text-blue-600" href="#">
@@ -26,7 +23,7 @@ export default function LandingPage() {
           <div className="container mx-auto px-4 md:px-6">
             <div className="flex flex-col items-center space-y-4 text-center">
               <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
-                Aprende sin límites con AprendeIA
+                Aprende sin límites con Deep Penguin
               </h1>
               <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
                 Descubre una nueva forma de estudiar donde el miedo a equivocarse desaparece y el aprendizaje se
@@ -36,9 +33,11 @@ export default function LandingPage() {
                 <button className="px-4 py-2 rounded-md font-medium bg-blue-600 text-white hover:bg-blue-700 transition-colors">
                   Comenzar gratis
                 </button>
-                <button className="px-4 py-2 rounded-md font-medium border border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors">
-                  Para maestros
-                </button>
+                <Link href={"/teachers"}>
+                  <button className="px-4 py-2 rounded-md font-medium border border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors">
+                    Para maestros
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -121,16 +120,18 @@ export default function LandingPage() {
                 <button className="px-4 py-2 rounded-md font-medium bg-blue-600 text-white hover:bg-blue-700 transition-colors">
                   Comenzar gratis
                 </button>
-                <button className="px-4 py-2 rounded-md font-medium border border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors">
-                  Explorar más
-                </button>
+                <Link href={"/teachers"}>
+                  <button className="px-4 py-2 rounded-md font-medium border border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors">
+                    Explorar más
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
         </section>
       </main>
       <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
-        <p className="text-xs text-gray-500 dark:text-gray-400">© 2024 AprendeIA. Todos los derechos reservados.</p>
+        <p className="text-xs text-gray-500 dark:text-gray-400">© 2024 Deep Penguin. Todos los derechos reservados.</p>
         <nav className="sm:ml-auto flex gap-4 sm:gap-6">
           <Link className="text-xs hover:text-blue-600" href="#">
             Términos de servicio
