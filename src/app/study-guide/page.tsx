@@ -29,7 +29,7 @@ export default function StudyGuidePage() {
       setIsLoading(true)
       try {
         const response = await axios.get(
-          `https://deep-penguin-0f0b8241d682.herokuapp.com/study-guide/${encodeURIComponent(topic)}`,
+          `https://deep-penguin-0f0b8241d682.herokuapp.com/study-guide/${encodeURIComponent(topic)}?level=${difficulty}&style=${learningStyle}`,
           {
             timeout: 60000, // 30 segundos de timeout
             headers: {
