@@ -1,7 +1,7 @@
 import { Check } from "lucide-react"
 
 export const PersonalPricing = (props: any) => {
-    const price = props.price;
+    const price = props.price ? props.price : 0.0;  //ternario
     return (
         <div className="flex flex-col p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
             <h3 className="text-2xl font-bold text-center mb-4">Maestro Perpetuo</h3>
