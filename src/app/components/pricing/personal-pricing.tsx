@@ -1,6 +1,13 @@
+import React from "react";
 import { Check } from "lucide-react"
 
-export const PersonalPricing = (props: any) => {
+
+interface PersonalPricingProps {
+    price?: number;
+  }
+
+
+export const PersonalPricing: React.FC<PersonalPricingProps> = ({ price = 0 }) =>  {
     const price = props.price ? props.price : 0.0;  //ternario
     return (
         <div className="flex flex-col p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
