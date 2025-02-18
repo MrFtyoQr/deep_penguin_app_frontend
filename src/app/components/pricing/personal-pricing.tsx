@@ -1,6 +1,6 @@
 import { Check } from "lucide-react"
 
-export const PersonalPricing = (props) => {
+export const PersonalPricing = (props: any) => {
     const price = props.price;
     return (
         <div className="flex flex-col p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
