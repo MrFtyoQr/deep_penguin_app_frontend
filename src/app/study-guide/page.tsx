@@ -132,7 +132,10 @@ export default function StudyGuidePage() {
                   type="text"
                   placeholder="Ingresa el tema"
                   value={topic}
-                  onChange={(e) => setTopic(e.target.value)}
+                  onChange={(e) => {
+                    setTopic(e.target.value);
+                    console.log(e.target.value);
+                  }}
                   required
                 />
               </div>

@@ -1,19 +1,13 @@
-import React from "react";
+
 import { Check } from "lucide-react"
 
 
-interface PersonalPricingProps {
-    price?: number;
-  }
-
-
-export const PersonalPricing: React.FC<PersonalPricingProps> = ({ price = 0 }) =>  {
-    const price = props.price ? props.price : 0.0;  //ternario
+export const PersonalPricing = () =>  {
     return (
         <div className="flex flex-col p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
             <h3 className="text-2xl font-bold text-center mb-4">Maestro Perpetuo</h3>
             <div className="text-center mb-4">
-                <span className="text-4xl font-bold">${price}</span> / mes
+                <span className="text-4xl font-bold">$9.99</span> / mes
             </div>
             <ul className="space-y-2 mb-6 flex-grow">
                 <li className="flex items-center">
