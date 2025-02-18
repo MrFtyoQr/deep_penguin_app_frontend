@@ -28,7 +28,7 @@ export default function PricingPage() {
               conocimiento ilimitado.
             </p>
             <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 max-w-4xl mx-auto">
-              <PersonalPricing />
+              <PersonalPricing price={9.99} />
               <div className="flex flex-col p-6 bg-blue-50 dark:bg-blue-900 rounded-lg shadow-lg border-2 border-blue-500">
                 <h3 className="text-2xl font-bold text-center mb-4">Academia Ilimitada</h3>
                 <div className="text-center mb-4">
@@ -41,7 +41,7 @@ export default function PricingPage() {
                   </li>
                   <li className="flex items-center">
                     <Check className="h-5 w-5 text-green-500 mr-2" />
-                    Hasta 500 cuentas de maestros
+                    Hasta 200 cuentas de maestros
                   </li>
                   <li className="flex items-center">
                     <Check className="h-5 w-5 text-green-500 mr-2" />

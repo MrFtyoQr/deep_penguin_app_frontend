@@ -1,11 +1,12 @@
 import { Check } from "lucide-react"
 
-export const PersonalPricing = () => {
+export const PersonalPricing = (props) => {
+    const price = props.price;
     return (
         <div className="flex flex-col p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
             <h3 className="text-2xl font-bold text-center mb-4">Maestro Perpetuo</h3>
             <div className="text-center mb-4">
-                <span className="text-4xl font-bold">$9.99</span> / mes
+                <span className="text-4xl font-bold">${price}</span> / mes
             </div>
             <ul className="space-y-2 mb-6 flex-grow">
                 <li className="flex items-center">
