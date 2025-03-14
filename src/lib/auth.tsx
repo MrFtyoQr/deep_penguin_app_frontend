@@ -1,8 +1,47 @@
+// filepath: c:\Users\josep\OneDrive\Documentos\GitHub\deep_penguin_app_frontend\src\lib\auth.tsx
 "use client"
 
 import Link from "next/link"
 import { Brain } from "lucide-react"
-import { useAuth } from "@/lib/auth"
+import { createContext, useContext, ReactNode } from "react"
+import { UserProvider, useUser } from "@auth0/nextjs-auth0/client"
+
+interface AuthContextType {
+  user: any
+  loading: boolean
+  login: () => void
+  logout: () => void
+}
+
+// Creamos el contexto de autenticación
+const AuthContext = createContext<AuthContextType | null>(null)
+
+// Creamos el proveedor de autenticación
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const { user, isLoading } = useUser()
+
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        loading: isLoading,
+        login: () => (window.location.href = "/api/auth/login"),
+        logout: () => (window.location.href = "/api/auth/logout"),
+      }}
+    >
+      <UserProvider>{children}</UserProvider>
+    </AuthContext.Provider>
+  )
+}
+
+// Hook para consumir el contexto de autenticación
+export function useAuth() {
+  const context = useContext(AuthContext)
+  if (!context) {
+    throw new Error("useAuth debe usarse dentro de un AuthProvider")
+  }
+  return context
+}
 
 export default function LoginPage() {
   const { login } = useAuth()
@@ -51,4 +90,3 @@ export default function LoginPage() {
     </div>
   )
 }
-
