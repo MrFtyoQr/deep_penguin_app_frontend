@@ -5,7 +5,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Brain, Book, Plus, LogOut, User, Settings, ChevronRight, Trash2 } from "lucide-react"
 import axios from "axios"
-import { useAuth } from "@/app/lib/auth"
+import { useAuth } from "@/app/lib/auth" // Verificar que esta ruta sea correcta
 
 // Define types for our study guides
 interface Question {

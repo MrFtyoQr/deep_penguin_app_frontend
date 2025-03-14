@@ -1,6 +1,5 @@
 "use client"
 
-import { useRouter } from "next/navigation"
 import { useState, useEffect, createContext, useContext, type ReactNode } from "react"
 
 interface User {
@@ -20,15 +19,15 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null)
 
 // Auth0 URLs
-const AUTH0_DOMAIN = "dev-xxxxxxxx.us.auth0.com" // Reemplaza con tu dominio de Auth0
-const AUTH0_CLIENT_ID = "tu_client_id" // Reemplaza con tu Client ID de Auth0
+const AUTH0_DOMAIN = "dev-0s1r77r0jsopwlq2.us.auth0.com " // Reemplaza con tu dominio de Auth0
+const AUTH0_CLIENT_ID = "7tE34SmxRbxTI4ExQJ6MloUuxrcOvB7w" // Reemplaza con tu Client ID de Auth0
 const REDIRECT_URI = "https://deep-penguin-dwy9cfzwg-mrftyoqrs-projects.vercel.app/api/auth/callback"
 const HOME_URL = "https://deep-penguin-dwy9cfzwg-mrftyoqrs-projects.vercel.app"
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
-  const router = useRouter()
+  // Eliminamos la variable router que no se usa
 
   useEffect(() => {
     // Check if user is logged in
@@ -75,7 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // Redirect to Auth0 logout URL
     window.location.href = `https://${AUTH0_DOMAIN}/v2/logout?client_id=${AUTH0_CLIENT_ID}&returnTo=${encodeURIComponent(HOME_URL)}`
-  }
+      }
 
   return <AuthContext.Provider value={{ user, loading, login, signup, logout }}>{children}</AuthContext.Provider>
 }

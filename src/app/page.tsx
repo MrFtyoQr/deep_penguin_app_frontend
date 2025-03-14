@@ -55,7 +55,7 @@ export default function StudyGuidePage() {
   const [saveSuccess, setSaveSuccess] = useState(false)
   const [saveError, setSaveError] = useState("")
   const router = useRouter()
-  const { user } = useAuth()
+  const { user, login } = useAuth()
 
   // Reset success/error messages after 5 seconds
   useEffect(() => {
