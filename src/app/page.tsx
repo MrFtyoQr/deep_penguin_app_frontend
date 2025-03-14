@@ -7,7 +7,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Brain, ArrowRight, BookOpen, Save, Trash2, AlertCircle } from "lucide-react"
 import axios from "axios"
-import { useAuth } from "@/lib/auth"
+import { useAuth } from "@/app/lib/auth"
 
 interface Option {
   index: number

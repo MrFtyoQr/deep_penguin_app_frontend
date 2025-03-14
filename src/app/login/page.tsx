@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { Brain } from "lucide-react"
-import { useAuth } from "@/lib/auth"
+import { useAuth } from "@/app/lib/auth"
 
 export default function LoginPage() {
   const { login } = useAuth()
