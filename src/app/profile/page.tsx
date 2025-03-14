@@ -3,8 +3,9 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Brain, Book, Plus, LogOut, User, Settings, ChevronRight } from "lucide-react"
+import { Brain, Book, Plus, LogOut, User, Settings, ChevronRight, Trash2 } from "lucide-react"
 import axios from "axios"
+import { useAuth } from "@/lib/auth"
 
 // Define types for our study guides
 interface Question {
@@ -26,35 +27,25 @@ interface StudyGuide {
   questions: Question[]
 }
 
+// Determine if we're in development or production
+const API_BASE_URL =
+  process.env.NODE_ENV === "production" ? "https://deep-penguin-0f0b8241d682.herokuapp.com" : "http://localhost:8000"
+
 export default function ProfilePage() {
-  const [user, setUser] = useState<{ name: string; email: string } | null>(null)
+  const { user, logout, loading } = useAuth()
   const [studyGuides, setStudyGuides] = useState<StudyGuide[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [isDeleting, setIsDeleting] = useState<string | null>(null)
   const [error, setError] = useState("")
+  const [successMessage, setSuccessMessage] = useState("")
   const router = useRouter()
 
   useEffect(() => {
     // Check if user is logged in
-    // This would typically check for a token in localStorage or cookies
-    const checkAuth = () => {
-      // For demo purposes, we'll simulate a logged-in user
-      // In a real app, you would verify the token with your backend
-      const isLoggedIn = true // Replace with actual auth check
-
-      if (!isLoggedIn) {
-        router.push("/login")
-        return
-      }
-
-      // Mock user data - replace with actual user data from your auth system
-      setUser({
-        name: "Usuario de Ejemplo",
-        email: "usuario@ejemplo.com",
-      })
+    if (!loading && !user) {
+      router.push("/login")
     }
-
-    checkAuth()
-  }, [router])
+  }, [user, loading, router])
 
   useEffect(() => {
     // Fetch user's study guides
@@ -64,9 +55,9 @@ export default function ProfilePage() {
       setIsLoading(true)
       try {
         // Replace with your actual API endpoint
-        const response = await axios.get("https://deep-penguin-0f0b8241d682.herokuapp.com/user/study-guides", {
+        const response = await axios.get(`${API_BASE_URL}/user/study-guides`, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // Replace with your auth token
+            Authorization: `Bearer ${localStorage.getItem("auth0_token")}`,
             accept: "application/json",
           },
         })
@@ -80,17 +71,48 @@ export default function ProfilePage() {
       }
     }
 
-    fetchStudyGuides()
+    if (user) {
+      fetchStudyGuides()
+    }
   }, [user])
 
-  const handleLogout = () => {
-    // Clear auth token and user data
-    localStorage.removeItem("token")
-    setUser(null)
-    router.push("/login")
+  const handleDeleteGuide = async (guideId: string, level: string, style: string) => {
+    if (!user) return
+
+    setIsDeleting(guideId)
+    setError("")
+    setSuccessMessage("")
+
+    try {
+      // Send the DELETE request
+      await axios.delete(`${API_BASE_URL}/study-guide/${user.id}/${level}/${style}`, {
+        headers: {
+          accept: "application/json",
+          Authorization: `Bearer ${localStorage.getItem("auth0_token")}`,
+        },
+      })
+
+      // Remove the deleted guide from the state
+      setStudyGuides((prev) => prev.filter((guide) => guide.id !== guideId))
+      setSuccessMessage("Guía eliminada correctamente")
+
+      // Clear success message after 5 seconds
+      setTimeout(() => {
+        setSuccessMessage("")
+      }, 5000)
+    } catch (error) {
+      console.error("Error al eliminar la guía de estudio:", error)
+      setError("Error al eliminar la guía de estudio")
+    } finally {
+      setIsDeleting(null)
+    }
   }
 
-  if (!user) {
+  const handleLogout = () => {
+    logout()
+  }
+
+  if (loading || !user) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="h-8 w-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
@@ -117,6 +139,36 @@ export default function ProfilePage() {
       </header>
       <main className="flex-1 p-4 md:p-6 lg:p-8">
         <div className="max-w-6xl mx-auto">
+          {successMessage && (
+            <div className="mb-4 p-4 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 rounded-md flex items-center gap-2">
+              <div className="h-5 w-5 rounded-full bg-green-100 dark:bg-green-800 flex items-center justify-center">
+                <svg
+                  className="h-3 w-3 text-green-600 dark:text-green-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <span>{successMessage}</span>
+            </div>
+          )}
+
+          {error && (
+            <div className="mb-4 p-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-md flex items-center gap-2">
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <span>{error}</span>
+            </div>
+          )}
+
           <div className="flex flex-col md:flex-row gap-8">
             {/* User profile sidebar */}
             <div className="w-full md:w-1/4">
@@ -165,12 +217,6 @@ export default function ProfilePage() {
                 </Link>
               </div>
 
-              {error && (
-                <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-4 rounded-md">
-                  {error}
-                </div>
-              )}
-
               {isLoading ? (
                 <div className="flex justify-center py-12">
                   <div className="h-8 w-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
@@ -194,8 +240,11 @@ export default function ProfilePage() {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {studyGuides.map((guide) => (
-                    <Link href={`/study-guide/${guide.id}`} key={guide.id}>
-                      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+                    <div
+                      key={guide.id}
+                      className="relative bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
+                    >
+                      <Link href={`/study-guide/${guide.id}`} className="block">
                         <div className="flex justify-between items-start mb-4">
                           <div className="bg-blue-100 dark:bg-blue-900/30 p-2 rounded-md">
                             <Book className="h-5 w-5 text-blue-600" />
@@ -218,8 +267,20 @@ export default function ProfilePage() {
                             })}
                           </span>
                         </div>
-                      </div>
-                    </Link>
+                      </Link>
+                      <button
+                        onClick={() => handleDeleteGuide(guide.id, guide.level, guide.learning_style)}
+                        disabled={isDeleting === guide.id}
+                        className="absolute top-2 right-2 p-1 rounded-full bg-red-100 dark:bg-red-900/20 text-red-600 hover:bg-red-200 dark:hover:bg-red-900/30 transition-colors"
+                        title="Eliminar guía"
+                      >
+                        {isDeleting === guide.id ? (
+                          <div className="h-4 w-4 border-2 border-red-600 border-t-transparent rounded-full animate-spin" />
+                        ) : (
+                          <Trash2 className="h-4 w-4" />
+                        )}
+                      </button>
+                    </div>
                   ))}
                 </div>
               )}

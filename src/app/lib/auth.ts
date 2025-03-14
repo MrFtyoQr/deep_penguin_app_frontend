@@ -1,8 +1,6 @@
 "use client"
 
-// This is a placeholder for Auth0 integration
-// You'll need to replace this with actual Auth0 configuration
-
+// Auth0 integration
 import { useRouter } from "next/navigation"
 import { useState, useEffect, createContext, useContext, type ReactNode } from "react"
 
@@ -15,8 +13,8 @@ interface User {
 interface AuthContextType {
   user: User | null
   loading: boolean
-  login: (email: string, password: string) => Promise<void>
-  signup: (name: string, email: string, password: string) => Promise<void>
+  login: () => void
+  signup: () => void
   logout: () => void
 }
 
@@ -29,84 +27,76 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     // Check if user is logged in
-    const token = localStorage.getItem("token")
-    if (token) {
-      // Validate token with your backend
-      // For now, we'll just simulate a logged-in user
-      setUser({
-        id: "1",
-        name: "Usuario de Ejemplo",
-        email: "usuario@ejemplo.com",
-      })
+    const checkAuth = async () => {
+      try {
+        // Check for Auth0 token in localStorage or session
+        const token = localStorage.getItem("auth0_token")
+
+        if (token) {
+          // In a real implementation, you would validate the token
+          // and fetch user data from Auth0
+
+          // For now, we'll simulate a logged-in user
+          setUser({
+            id: "Auth0", // Using 'Auth0' as the user_id to match your DELETE endpoint
+            name: "Usuario de Deep Penguin",
+            email: "usuario@ejemplo.com",
+          })
+        }
+      } catch (error) {
+        console.error("Error checking authentication:", error)
+      } finally {
+        setLoading(false)
+      }
     }
-    setLoading(false)
+
+    checkAuth()
   }, [])
 
-  const login = async (email: string, password: string) => {
-    setLoading(true)
-    try {
-      // Replace with actual Auth0 login
-      // const response = await fetch('your-auth-endpoint', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ email, password }),
-      // })
+  const login = () => {
+    // In a real implementation, this would redirect to Auth0 login page
+    // For now, we'll simulate a successful login
 
-      // if (!response.ok) throw new Error('Invalid credentials')
+    // Redirect to Auth0 login
+    // window.location.href = 'https://your-auth0-domain.auth0.com/authorize?...'
 
-      // const data = await response.json()
-      // localStorage.setItem('token', data.token)
-
-      // Simulate successful login
-      localStorage.setItem("token", "fake-token")
-      setUser({
-        id: "1",
-        name: "Usuario de Ejemplo",
-        email: email,
-      })
-
-      router.push("/profile")
-    } catch (error) {
-      throw error
-    } finally {
-      setLoading(false)
-    }
+    // For demo purposes, simulate successful login
+    localStorage.setItem("auth0_token", "simulated_token")
+    setUser({
+      id: "Auth0",
+      name: "Usuario de Deep Penguin",
+      email: "usuario@ejemplo.com",
+    })
+    router.push("/profile")
   }
 
-  const signup = async (name: string, email: string, password: string) => {
-    setLoading(true)
-    try {
-      // Replace with actual Auth0 signup
-      // const response = await fetch('your-auth-endpoint/signup', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ name, email, password }),
-      // })
+  const signup = () => {
+    // In a real implementation, this would redirect to Auth0 signup page
+    // For now, we'll simulate a successful signup
 
-      // if (!response.ok) throw new Error('Error creating account')
+    // Redirect to Auth0 signup
+    // window.location.href = 'https://your-auth0-domain.auth0.com/authorize?screen_hint=signup&...'
 
-      // const data = await response.json()
-      // localStorage.setItem('token', data.token)
-
-      // Simulate successful signup
-      localStorage.setItem("token", "fake-token")
-      setUser({
-        id: "1",
-        name: name,
-        email: email,
-      })
-
-      router.push("/profile")
-    } catch (error) {
-      throw error
-    } finally {
-      setLoading(false)
-    }
+    // For demo purposes, simulate successful signup
+    localStorage.setItem("auth0_token", "simulated_token")
+    setUser({
+      id: "Auth0",
+      name: "Usuario de Deep Penguin",
+      email: "usuario@ejemplo.com",
+    })
+    router.push("/profile")
   }
 
   const logout = () => {
-    localStorage.removeItem("token")
+    // In a real implementation, this would call Auth0 logout endpoint
+    // For now, we'll just clear the token
+
+    localStorage.removeItem("auth0_token")
     setUser(null)
+
+    // In a real implementation, you would redirect to Auth0 logout URL
+    // window.location.href = 'https://your-auth0-domain.auth0.com/v2/logout?...'
+
     router.push("/login")
   }
 
