@@ -43,16 +43,6 @@ export default function LandingPage() {
                     Para maestros
                   </button>
                 </Link>
-                <Link href="/word-search">
-                  <button className="px-4 py-2 rounded-md font-medium border border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors">
-                    Sopa de Letras
-                  </button>
-                </Link>
-                <Link href="/crossword">
-                  <button className="px-4 py-2 rounded-md font-medium border border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors">
-                    Crucigrama
-                  </button>
-                </Link>
               </div>
             </div>
           </div>
