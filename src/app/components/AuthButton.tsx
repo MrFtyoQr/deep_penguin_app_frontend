@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useUser } from '@auth0/nextjs-auth0';
 
 export default function AuthButton() {
@@ -11,13 +12,13 @@ export default function AuthButton() {
   return (
     <div>
       {!user ? (
-        <a href="/api/auth/login" className="text-sm font-medium hover:text-blue-600">
+        <Link href="/api/auth/login" className="text-sm font-medium hover:text-blue-600">
           Iniciar Sesión
-        </a>
+        </Link>
       ) : (
-        <a href="/api/auth/logout" className="text-sm font-medium hover:text-red-600">
-          Cerrar Sesión ({user.name})
-        </a>
+        <Link href="/api/auth/logout" className="text-sm font-medium hover:text-red-600">
+          Cerrar Sesión ({user?.name ?? 'Usuario'})
+        </Link>
       )}
     </div>
   );
