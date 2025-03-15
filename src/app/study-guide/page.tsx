@@ -2,10 +2,11 @@
 
 import type React from "react"
 import axios from "axios"
-import { useState, useCallback } from "react"
+import { useState, useCallback, useEffect } from "react"
 import { BookOpen, ChevronLeft, ChevronRight, Loader2, User, RefreshCw } from "lucide-react"
 import Link from "next/link"
 import { useUser } from "@auth0/nextjs-auth0/client"
+import { getAccessToken } from "@auth0/nextjs-auth0"
 
 type Option = { index: number; text: string }
 type Question = { text: string; options: Option[]; correct_answer: Option }
@@ -21,9 +22,7 @@ export default function StudyGuidePage() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [userAnswers, setUserAnswers] = useState<number[]>([])
   const [showResults, setShowResults] = useState(false)
-
-  // Simulamos un nombre de usuario para la demostración
-  const userName = "Juan Pérez"
+  const [token, setToken] = useState<string | null>(null)
 
   const handleGenerate = useCallback(
     async (e: React.FormEvent) => {
@@ -36,6 +35,7 @@ export default function StudyGuidePage() {
             timeout: 60000, // 30 segundos de timeout
             headers: {
               accept: "application/json",
+              Authorization: `Bearer ${token}`,
             },
           },
         )
@@ -90,6 +90,14 @@ export default function StudyGuidePage() {
     setUserAnswers([])
     setCurrentQuestionIndex(0)
     setShowResults(false)
+  }, [])
+
+  useEffect(() => {
+    const fetchToken = async () => {
+      const tokenResponse: any = await getAccessToken()
+      setToken(tokenResponse)
+    }
+    fetchToken()
   }, [])
 
   if (isLoading) return <div>Loading...</div>;
