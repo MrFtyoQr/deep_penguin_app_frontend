@@ -96,6 +96,7 @@ export default function StudyGuidePage() {
     const fetchToken = async () => {
       const tokenResponse: any = await getAccessToken()
       setToken(tokenResponse)
+      console.log(tokenResponse)
     }
     fetchToken()
   }, [])
