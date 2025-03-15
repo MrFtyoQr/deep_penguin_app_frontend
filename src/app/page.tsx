@@ -19,16 +19,17 @@ export default async function LandingPage() {
           <Link className="text-sm font-medium hover:text-blue-600" href="/teachers">
             Para Maestros
           </Link>
-          (session) ? (
-          <Link className="text-sm font-medium hover:text-blue-600" href="/api/auth/logout">
-            Salir ({session?.user.name})
-          </Link>
+          
+          {session ? (
+            <Link className="text-sm font-medium hover:text-blue-600" href="/api/auth/logout">
+              Salir ({session?.user?.name})
+            </Link>
           ) : (
-          <Link href="/api/auth/login" className="text-sm font-medium hover:text-blue-600" >
-          Comenzar
-        </Link>
-          )
-      </nav>
+            <Link href="/api/auth/login" className="text-sm font-medium hover:text-blue-600">
+              Comenzar
+            </Link>
+          )}
+        </nav>
       </header>
       <main className="flex-1">
         <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-gray-50 dark:bg-gray-900">
