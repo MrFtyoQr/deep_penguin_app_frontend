@@ -5,16 +5,18 @@ import axios from "axios"
 import { useState, useCallback } from "react"
 import { BookOpen, ChevronLeft, ChevronRight, Loader2, User, RefreshCw } from "lucide-react"
 import Link from "next/link"
+import { useUser } from "@auth0/nextjs-auth0/client"
 
 type Option = { index: number; text: string }
 type Question = { text: string; options: Option[]; correct_answer: Option }
 type Exam = { text: string; questions: Question[] }
 
 export default function StudyGuidePage() {
+  const { user, error, isLoading } = useUser();
   const [topic, setTopic] = useState("")
   const [difficulty, setDifficulty] = useState("medium")
   const [learningStyle, setLearningStyle] = useState("technical")
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoadingLocal, setIsLoadingLocal] = useState(false)
   const [exam, setExam] = useState<Exam | null>(null)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [userAnswers, setUserAnswers] = useState<number[]>([])
@@ -26,7 +28,7 @@ export default function StudyGuidePage() {
   const handleGenerate = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault()
-      setIsLoading(true)
+      setIsLoadingLocal(true)
       try {
         const response = await axios.get(
           `https://deep-penguin-0f0b8241d682.herokuapp.com/study-guide/${encodeURIComponent(topic)}?level=${difficulty}&style=${learningStyle}`,
@@ -55,7 +57,7 @@ export default function StudyGuidePage() {
         }
         // Aquí podrías mostrar un mensaje de error al usuario
       } finally {
-        setIsLoading(false)
+        setIsLoadingLocal(false)
       }
     },
     [topic],
@@ -90,6 +92,9 @@ export default function StudyGuidePage() {
     setShowResults(false)
   }, [])
 
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>{error.message}</div>;
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Navbar */}
@@ -103,7 +108,7 @@ export default function StudyGuidePage() {
               </Link>
             </div>
             <div className="flex items-center">
-              <span className="text-gray-700 dark:text-gray-300 mr-2">{userName}</span>
+              <span className="text-gray-700 dark:text-gray-300 mr-2">{user?.name}</span>
               <User className="h-6 w-6 text-gray-500" />
             </div>
           </div>
