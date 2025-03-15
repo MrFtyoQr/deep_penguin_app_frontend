@@ -94,12 +94,20 @@ export default function StudyGuidePage() {
 
   useEffect(() => {
     const fetchToken = async () => {
-      const tokenResponse: any = await getAccessToken()
-      setToken(tokenResponse)
-      console.log(tokenResponse)
+      try {
+        const response = await fetch("/api/auth/token"); // 🔹 Ruta en Next.js API
+        const data = await response.json();
+        setToken(data.accessToken);
+        console.log("Token obtenido:", data.accessToken);
+      } catch (error) {
+        console.error("Error obteniendo el token:", error);
+      }
+    };
+
+    if (user) {
+      fetchToken();
     }
-    fetchToken()
-  }, [])
+  }, [user]);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>{error.message}</div>;
