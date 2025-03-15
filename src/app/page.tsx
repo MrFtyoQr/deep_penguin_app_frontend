@@ -1,5 +1,7 @@
 import Link from "next/link"
 import { BookOpen, Brain, Users, Trophy } from "lucide-react"
+import AuthButton from "./components/AuthButton"
+
 
 export default function LandingPage() {
   return (
@@ -14,9 +16,10 @@ export default function LandingPage() {
             Para Maestros
           </Link>
           <Link className="text-sm font-medium hover:text-blue-600" href="#">
-            Comenzar
-          </Link>
-        </nav>
+          Comenzar
+        </Link>
+        <AuthButton /> {/* Agregamos el botón de autenticación */}
+      </nav>
       </header>
       <main className="flex-1">
         <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-gray-50 dark:bg-gray-900">
