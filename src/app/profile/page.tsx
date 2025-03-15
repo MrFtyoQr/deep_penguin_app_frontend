@@ -5,6 +5,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Brain, Book, Plus, LogOut, User, Settings, ChevronRight } from "lucide-react"
 import axios from "axios"
+import { getSession } from "@auth0/nextjs-auth0"
 
 // Define types for our study guides
 interface Question {
@@ -27,29 +28,23 @@ interface StudyGuide {
 }
 
 export default function ProfilePage() {
-  const [user, setUser] = useState<{ name: string; email: string } | null>(null)
+  const [user, setUser] = useState<{ name: string; email: string; picture: string } | null>(null)
   const [studyGuides, setStudyGuides] = useState<StudyGuide[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState("")
   const router = useRouter()
 
   useEffect(() => {
-    // Check if user is logged in
-    // This would typically check for a token in localStorage or cookies
-    const checkAuth = () => {
-      // For demo purposes, we'll simulate a logged-in user
-      // In a real app, you would verify the token with your backend
-      const isLoggedIn = true // Replace with actual auth check
-
-      if (!isLoggedIn) {
-        router.push("/login")
+    const checkAuth = async () => {
+      const session = await getSession()
+      if (!session?.user) {
+        router.push("/api/auth/login")
         return
       }
-
-      // Mock user data - replace with actual user data from your auth system
       setUser({
-        name: "Usuario de Ejemplo",
-        email: "usuario@ejemplo.com",
+        name: session.user.name,
+        email: session.user.email,
+        picture: session.user.picture,
       })
     }
 
@@ -57,16 +52,14 @@ export default function ProfilePage() {
   }, [router])
 
   useEffect(() => {
-    // Fetch user's study guides
     const fetchStudyGuides = async () => {
       if (!user) return
 
       setIsLoading(true)
       try {
-        // Replace with your actual API endpoint
         const response = await axios.get("https://deep-penguin-0f0b8241d682.herokuapp.com/user/study-guides", {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // Replace with your auth token
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
             accept: "application/json",
           },
         })
@@ -84,10 +77,9 @@ export default function ProfilePage() {
   }, [user])
 
   const handleLogout = () => {
-    // Clear auth token and user data
     localStorage.removeItem("token")
     setUser(null)
-    router.push("/login")
+    router.push("/api/auth/logout")
   }
 
   if (!user) {
@@ -122,9 +114,7 @@ export default function ProfilePage() {
             <div className="w-full md:w-1/4">
               <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
                 <div className="flex flex-col items-center text-center mb-6">
-                  <div className="h-24 w-24 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mb-4">
-                    <User className="h-12 w-12 text-blue-600" />
-                  </div>
+                  <img src={user.picture} alt={user.name} className="h-24 w-24 rounded-full mb-4" />
                   <h2 className="text-xl font-bold">{user.name}</h2>
                   <p className="text-gray-500 dark:text-gray-400 text-sm">{user.email}</p>
                 </div>
