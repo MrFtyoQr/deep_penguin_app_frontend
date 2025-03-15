@@ -1,9 +1,13 @@
 import Link from "next/link"
 import { BookOpen, Brain, Users, Trophy } from "lucide-react"
+import { getSession } from "@auth0/nextjs-auth0";
 
 
 
-export default function LandingPage() {
+
+export default async function LandingPage() {
+  const session = await getSession();
+  session?.user;
   return (
     <div className="flex flex-col min-h-screen">
       <header className="px-4 lg:px-6 h-14 flex items-center border-b">
@@ -15,9 +19,15 @@ export default function LandingPage() {
           <Link className="text-sm font-medium hover:text-blue-600" href="/teachers">
             Para Maestros
           </Link>
+          (session) ? (
+          <Link className="text-sm font-medium hover:text-blue-600" href="/api/auth/logout">
+            Salir ({session?.user.name})
+          </Link>
+          ) : (
           <Link href="/api/auth/login" className="text-sm font-medium hover:text-blue-600" >
           Comenzar
         </Link>
+          )
       </nav>
       </header>
       <main className="flex-1">
