@@ -15,10 +15,9 @@ export default function LandingPage() {
           <Link className="text-sm font-medium hover:text-blue-600" href="/teachers">
             Para Maestros
           </Link>
-          <Link className="text-sm font-medium hover:text-blue-600" href="#">
+          <Link href="/api/auth/login" className="text-sm font-medium hover:text-blue-600" >
           Comenzar
         </Link>
-        <AuthButton /> {/* Agregamos el botón de autenticación */}
       </nav>
       </header>
       <main className="flex-1">
