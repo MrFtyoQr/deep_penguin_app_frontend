@@ -1,6 +1,35 @@
 import Link from "next/link"
 import { BookOpen, Brain, Users, Trophy } from "lucide-react"
 
+import { getSession } from '@auth0/nextjs-auth0';
+import { GetServerSideProps } from 'next';
+
+type DashboardProps = {
+  user: {
+    name?: string;
+    email?: string;
+    picture?: string;
+  } | null;
+};
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  const session = await getSession(req, res);
+
+  if (!session?.user) {
+    // Redirigir al login si no hay usuario autenticado
+    return {
+      redirect: {
+        destination: '/api/auth/login',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: { user: session.user },
+  };
+};
+
 
 export default function LandingPage() {
   return (
