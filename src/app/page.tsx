@@ -1,6 +1,5 @@
 import Link from "next/link"
 import { BookOpen, Brain, Users, Trophy } from "lucide-react"
-import AuthButton from "./components/AuthButton"
 
 
 export default function LandingPage() {
