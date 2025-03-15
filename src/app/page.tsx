@@ -2,16 +2,6 @@ import Link from "next/link"
 import { BookOpen, Brain, Users, Trophy } from "lucide-react"
 
 
-type DashboardProps = {
-  user: {
-    name?: string;
-    email?: string;
-    picture?: string;
-  } | null;
-};
-
-
-
 
 export default function LandingPage() {
   return (
